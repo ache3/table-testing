@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sortable Table</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+            cursor: pointer;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        th:hover {
+            background-color: #ddd;
+        }
+    </style>
+</head>
+<body>
+
+<table id="sortableTable">
+    <thead>
+        <tr>
+            <th onclick="sortTable(0)">Name</th>
+            <th onclick="sortTable(1)">Age</th>
+            <th onclick="sortTable(2)">Country</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>John</td>
+            <td>25</td>
+            <td>USA</td>
+        </tr>
+        <tr>
+            <td>Mary</td>
+            <td>30</td>
+            <td>Canada</td>
+        </tr>
+        <tr>
+            <td>Mike</td>
+            <td>20</td>
+            <td>UK</td>
+        </tr>
+        <tr>
+            <td>Sara</td>
+            <td>35</td>
+            <td>Australia</td>
+        </tr>
+    </tbody>
+</table>
+
+<script>
+    function sortTable(columnIndex) {
+        var table = document.getElementById("sortableTable");
+        var rows = table.rows;
+        var switching = true;
+        var shouldSwitch;
+        var direction = "asc"; 
+        var switchCount = 0;
+        
+        while (switching) {
+            switching = false;
+            var rowsArray = Array.from(rows).slice(1); 
+            
+            for (var i = 0; i < rowsArray.length - 1; i++) {
+                shouldSwitch = false;
+                var x = rowsArray[i].getElementsByTagName("TD")[columnIndex];
+                var y = rowsArray[i + 1].getElementsByTagName("TD")[columnIndex];
+                
+                if (direction == "asc") {
+                    if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                } else if (direction == "desc") {
+                    if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+            }
+            
+            if (shouldSwitch) {
+                rowsArray[i].parentNode.insertBefore(rowsArray[i + 1], rowsArray[i]);
+                switching = true;
+                switchCount++; 
+            } else {
+                if (switchCount == 0 && direction == "asc") {
+                    direction = "desc";
+                    switching = true;
+                }
+            }
+        }
+    }
+</script>
+
+</body>
+</html>
